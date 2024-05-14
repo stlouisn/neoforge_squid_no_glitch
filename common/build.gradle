@@ -1,14 +1,5 @@
+apply from: "https://raw.githubusercontent.com/SteveKunG/GradleScripts/main/architectury/common.gradle"
+
 architectury {
-    common(project.enabled_platforms.split(","))
     injectInjectables = false
-}
-
-loom {
-    mixin {
-        defaultRefmapName = "mixins.squidnoglitch.refmap.json"
-    }
-}
-
-dependencies {
-    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
 }
