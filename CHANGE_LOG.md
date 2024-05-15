@@ -1,1 +1,1 @@
-* Mods no longer support multiple versions at the same time, this causes problem with mapping issues.
+* Mod no longer supports multiple versions at the same time, this will cause a problem with mapping issues.
