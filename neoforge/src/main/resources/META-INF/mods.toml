@@ -1,5 +1,5 @@
 modLoader = "javafml"
-loaderVersion = "[40,)"
+loaderVersion = "[2,)"
 license = "MIT"
 issueTrackerURL = "https://github.com/SteveKunG/SquidNoGlitch/issues"
 
@@ -12,9 +12,12 @@ displayURL = "https://modrinth.com/mod/squid-no-glitch"
 logoFile = "logo.png"
 authors = "SteveKunG"
 
+[[mixins]]
+config = "mixins.squidnoglitch.json"
+
 [[dependencies.squidnoglitch]]
 modId = "minecraft"
-mandatory = true
-versionRange = "[1.18.2]"
+type = "required"
+versionRange = "[1.20.4]"
 ordering = "NONE"
 side = "BOTH"
