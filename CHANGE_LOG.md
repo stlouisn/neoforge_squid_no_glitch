@@ -1,1 +1,1 @@
-* Add fix for `MC-134626` - Squids are not being pulled down or pushed up with Bubble Column block.
+* Mod no longer supports multiple versions at the same time, this will cause a problem with mapping issues.
