@@ -81,7 +81,7 @@ public class MixinSquid extends WaterAnimal
     /**
      * <p>Fix Levitation effect doesn't apply reset fall distance, no bug reported yet.</p>
      */
-    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/animal/Squid.getEffect(Lnet/minecraft/world/effect/MobEffect;)Lnet/minecraft/world/effect/MobEffectInstance;"))
+    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/animal/Squid.getEffect(Lnet/minecraft/core/Holder;)Lnet/minecraft/world/effect/MobEffectInstance;"))
     private void squidnoglitch$resetFallDistanceForLevitation(CallbackInfo info)
     {
         this.resetFallDistance();
