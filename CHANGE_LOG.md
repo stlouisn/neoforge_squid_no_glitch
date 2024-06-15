@@ -1,1 +1,1 @@
-* Mod no longer supports multiple versions at the same time, this will cause a problem with mapping issues.
+* Update to 1.20.6
