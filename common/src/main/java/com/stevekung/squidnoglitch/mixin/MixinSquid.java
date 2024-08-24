@@ -15,10 +15,8 @@ import net.minecraft.world.level.block.BubbleColumnBlock;
 import net.minecraft.world.phys.Vec3;
 
 @Mixin(Squid.class)
-public class MixinSquid extends WaterAnimal
-{
-    MixinSquid()
-    {
+public class MixinSquid extends WaterAnimal {
+    MixinSquid() {
         super(null, null);
     }
 
@@ -29,10 +27,8 @@ public class MixinSquid extends WaterAnimal
      * <p>Add {@link net.minecraft.world.entity.LivingEntity#isEffectiveAi()} or {@link net.minecraft.world.entity.Entity#isControlledByLocalInstance()} check to prevent movement de-sync on the client.</p>
      */
     @Override
-    public void travel(Vec3 travelVector)
-    {
-        if (this.isEffectiveAi() || this.isControlledByLocalInstance())
-        {
+    public void travel(Vec3 travelVector) {
+        if (this.isEffectiveAi() || this.isControlledByLocalInstance()) {
             this.move(MoverType.SELF, this.getDeltaMovement());
         }
     }
@@ -43,35 +39,25 @@ public class MixinSquid extends WaterAnimal
      * <p>Dumbest fix when the squid is inside or above the bubble column block. Logics taken from {@link net.minecraft.world.entity.Entity#onInsideBubbleColumn(boolean)} and {@link net.minecraft.world.entity.Entity#onAboveBubbleCol(boolean)}.</p>
      */
     @ModifyArg(method = "aiStep", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/animal/Squid.setDeltaMovement(DDD)V"), slice = @Slice(to = @At(value = "INVOKE", target = "net/minecraft/world/phys/Vec3.horizontalDistance()D")), index = 1)
-    private double squidnoglitch$addBubbleColumnMovement(double y)
-    {
+    private double squidnoglitch$addBubbleColumnMovement(double y) {
         var bubbleYMovement = 0.0d;
         var prevY = this.getDeltaMovement().y;
         var blockState = this.level().getBlockState(this.blockPosition());
         var aboveBlockState = this.level().getBlockState(this.blockPosition().above());
 
-        if (aboveBlockState.isAir())
-        {
-            if (aboveBlockState.getBlock() instanceof BubbleColumnBlock)
-            {
-                if (aboveBlockState.getValue(BubbleColumnBlock.DRAG_DOWN))
-                {
+        if (aboveBlockState.isAir()) {
+            if (aboveBlockState.getBlock() instanceof BubbleColumnBlock) {
+                if (aboveBlockState.getValue(BubbleColumnBlock.DRAG_DOWN)) {
                     bubbleYMovement = Math.max(-0.9, prevY - 0.03);
-                }
-                else
-                {
+                } else {
                     bubbleYMovement = Math.min(1.8, prevY + 0.1);
                 }
             }
         }
-        if (blockState.getBlock() instanceof BubbleColumnBlock)
-        {
-            if (blockState.getValue(BubbleColumnBlock.DRAG_DOWN))
-            {
+        if (blockState.getBlock() instanceof BubbleColumnBlock) {
+            if (blockState.getValue(BubbleColumnBlock.DRAG_DOWN)) {
                 bubbleYMovement = Math.max(-0.3, prevY - 0.03);
-            }
-            else
-            {
+            } else {
                 bubbleYMovement = Math.min(0.7, prevY + 0.06);
             }
         }
@@ -82,8 +68,7 @@ public class MixinSquid extends WaterAnimal
      * <p>Fix Levitation effect doesn't apply reset fall distance, no bug reported yet.</p>
      */
     @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "net/minecraft/world/entity/animal/Squid.getEffect(Lnet/minecraft/core/Holder;)Lnet/minecraft/world/effect/MobEffectInstance;"))
-    private void squidnoglitch$resetFallDistanceForLevitation(CallbackInfo info)
-    {
+    private void squidnoglitch$resetFallDistanceForLevitation(CallbackInfo info) {
         this.resetFallDistance();
     }
 
@@ -95,10 +80,8 @@ public class MixinSquid extends WaterAnimal
      * <p>Adding Slow Falling effect movement vector to squids. And reset fall distance.</p>
      */
     @ModifyVariable(method = "aiStep", at = @At(value = "STORE", ordinal = 0), slice = @Slice(from = @At(value = "INVOKE", target = "net/minecraft/world/entity/animal/Squid.getDeltaMovement()Lnet/minecraft/world/phys/Vec3;", ordinal = 1)), index = 1, ordinal = 0)
-    private double squidnoglitch$addSlowFallingSpeed(double defaultValue)
-    {
-        if (this.hasEffect(MobEffects.SLOW_FALLING))
-        {
+    private double squidnoglitch$addSlowFallingSpeed(double defaultValue) {
+        if (this.hasEffect(MobEffects.SLOW_FALLING)) {
             this.resetFallDistance();
             return -0.05D * (double) (this.getEffect(MobEffects.SLOW_FALLING).getAmplifier() + 1);
         }
@@ -111,11 +94,9 @@ public class MixinSquid extends WaterAnimal
      * <p>Decreasing Y movement vector to {@code 0.15f} which should stop squids become stuck on land.</p>
      */
     @Mixin(targets = "net.minecraft.world.entity.animal.Squid$SquidRandomMovementGoal", priority = 1001)
-    public static class SquidRandomMovementGoal_MC132473
-    {
+    public static class SquidRandomMovementGoal_MC132473 {
         @ModifyConstant(method = "tick", constant = @Constant(floatValue = 0.2F, ordinal = 1))
-        private float squidnoglitch$modifyYMovementSpeed(float oldSpeed)
-        {
+        private float squidnoglitch$modifyYMovementSpeed(float oldSpeed) {
             return 0.15F;
         }
     }
@@ -128,17 +109,14 @@ public class MixinSquid extends WaterAnimal
      * <p>FYI: I'm not sure what is a Mojang standard for mobs that are far from the player. Since Dolphins and Turtles doesn't freeze their movement when the player is far from them.</p>
      */
     @Mixin(targets = "net.minecraft.world.entity.animal.Squid$SquidRandomMovementGoal")
-    public abstract static class SquidRandomMovementGoal_MC212687 extends Goal
-    {
+    public abstract static class SquidRandomMovementGoal_MC212687 extends Goal {
         @Shadow
         @Final
-        Squid squid;
+        private Squid squid;
 
         @Override
-        public void tick()
-        {
-            if (this.squid.getRandom().nextInt(reducedTickDelay(50)) == 0 || !this.squid.isInWater() || !this.squid.hasMovementVector())
-            {
+        public void tick() {
+            if (this.squid.getRandom().nextInt(reducedTickDelay(50)) == 0 || !this.squid.isInWater() || !this.squid.hasMovementVector()) {
                 var f = this.squid.getRandom().nextFloat() * (float) (Math.PI * 2);
                 var tx = Mth.cos(f) * 0.2F;
                 var ty = -0.1F + this.squid.getRandom().nextFloat() * 0.2F; // This constant will be replaced by `SquidRandomMovementGoal_MC132473`

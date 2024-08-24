@@ -1,34 +1,50 @@
-apply from: "https://raw.githubusercontent.com/SteveKunG/GradleScripts/main/architectury/fabric.gradle"
-
-loom {
-    runs.configureEach {
-        properties project.commonProperties
-        vmArgs project.commonVmArgs
-        vmArgs project.hotswapVmArgs
-    }
-
-    runs {
-        client {
-            if (project.hasProperty("usernameAndUUID")) {
-                programArgs project.usernameAndUUID
-            }
-        }
-    }
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
-String fileName = "${archives_base_name}-mc${minecraft_version}"
+architectury {
+    platformSetupLoomIde()
+    fabric()
+}
+
+base {
+    archivesName = "${project.archives_base_name}-${project.minecraft_version}-fabric-${project.mod_version}"
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentFabric.extendsFrom common
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${project.fabric_loader_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive false }
+}
 
 shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = "dev"
-    archiveVersion = "v${mod_version}"
-    archiveBaseName = fileName
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
 }
 
 remapJar {
-    inputFile.set shadowJar.archiveFile
+    input.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveClassifier = "fabric"
-    archiveVersion = "v${mod_version}"
-    archiveBaseName = fileName
+    archiveClassifier = null
+}
+
+jar {
+    archiveClassifier = "dev"
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
 }

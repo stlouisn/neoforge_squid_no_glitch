@@ -8,8 +8,6 @@ pluginManagement {
 }
 
 include("common")
-include("fabric")
-//include("forge")
-include("neoforge")
+include(enabled_platforms.split(","))
 
-rootProject.name = "SquidNoGlitch"
+rootProject.name = archives_base_name

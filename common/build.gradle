@@ -1,5 +1,31 @@
-apply from: "https://raw.githubusercontent.com/SteveKunG/GradleScripts/main/architectury/common.gradle"
-
 architectury {
-    injectInjectables = false
+    common(project.enabled_platforms.split(","))
+}
+
+sourceSets.main.resources {
+    if (project.hasProperty("use_datagen") && use_datagen.toBoolean()) {
+        srcDir "src/generated/resources"
+    }
+}
+
+loom {
+    if (project.hasProperty("use_access_widener") && use_access_widener.toBoolean()) {
+        accessWidenerPath = project(":fabric").file("src/main/resources/${archives_base_name}.accesswidener")
+    }
+
+    if (project.hasProperty("use_mixin") && use_mixin.toBoolean()) {
+        mixin {
+            defaultRefmapName = "mixins.${archives_base_name}.refmap.json"
+        }
+    }
+}
+
+dependencies {
+    modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
+}
+
+jar {
+    if (project.hasProperty("use_datagen") && use_datagen.toBoolean()) {
+        exclude ".cache"
+    }
 }

@@ -1,36 +1,36 @@
 {
     "schemaVersion": 1,
-    "id": "squidnoglitch",
-    "version": "${version}",
-    "name": "Squid No Glitch",
-    "description": "A tiny mod that fixes various vanilla bugs with the squid",
+    "id": "${mod_id}",
+    "version": "${mod_version}",
+    "name": "${mod_name}",
+    "description": "${mod_description}",
     "authors": [
-        "SteveKunG"
+        "${mod_authors}"
     ],
-    "icon": "logo.png",
     "contact": {
-        "homepage": "https://modrinth.com/mod/squid-no-glitch",
-        "sources": "https://github.com/SteveKunG/SquidNoGlitch",
-        "issues": "https://github.com/SteveKunG/SquidNoGlitch/issues"
+        "homepage": "${url_homepage}",
+        "sources": "${url_sources}",
+        "issues": "${url_issues}"
     },
-    "license": "MIT",
+    "license": "${mod_license}",
+    "icon": "logo.png",
     "environment": "*",
     "entrypoints": {
         "main": [
-            "com.stevekung.squidnoglitch.SquidNoGlitch::init"
+            "${maven_group}.fabric.${maven_main_package}"
         ]
     },
     "mixins": [
-        "mixins.squidnoglitch.json"
+        "${mod_id}.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.15",
-        "minecraft": ">=1.21"
+        "fabricloader": "${fabric_loader_version}",
+        "minecraft": "${minecraft_version}"
     },
     "custom": {
         "modmenu": {
             "links": {
-                "modmenu.discord": "https://discord.gg/4bAj4mkGag"
+                "modmenu.discord": "${url_discord}"
             }
         }
     }

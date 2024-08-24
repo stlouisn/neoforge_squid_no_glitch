@@ -1,34 +1,55 @@
-apply from: "https://raw.githubusercontent.com/SteveKunG/GradleScripts/main/architectury/neoforge.gradle"
-
-loom {
-    runs.configureEach {
-        properties project.commonProperties
-        vmArgs project.commonVmArgs
-        vmArgs project.hotswapVmArgs
-    }
-
-    runs {
-        client {
-            if (project.hasProperty("usernameAndUUID")) {
-                programArgs project.usernameAndUUID
-            }
-        }
-    }
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
 }
 
-String fileName = "${archives_base_name}-mc${minecraft_version}"
+architectury {
+    platformSetupLoomIde()
+    neoForge()
+}
+
+base {
+    archivesName = "${project.archives_base_name}-${project.minecraft_version}-neoforge-${project.mod_version}"
+}
+
+configurations {
+    common
+    shadowCommon
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+    developmentNeoForge.extendsFrom common
+}
+
+repositories {
+    maven { url = "https://maven.neoforged.net/releases/" }
+}
+
+dependencies {
+    neoForge "net.neoforged:neoforge:${project.neoforge_version}"
+
+    common(project(path: ":common", configuration: "namedElements")) { transitive false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionNeoForge")) { transitive = false }
+}
 
 shadowJar {
-    configurations = [project.configurations.shadowBundle]
-    archiveClassifier = "dev"
-    archiveVersion = "v${mod_version}"
-    archiveBaseName = fileName
+    exclude "fabric.mod.json"
+    exclude "architectury.common.json"
+
+    configurations = [project.configurations.shadowCommon]
+    archiveClassifier = "dev-shadow"
 }
 
 remapJar {
-    inputFile.set shadowJar.archiveFile
+    input.set shadowJar.archiveFile
     dependsOn shadowJar
-    archiveClassifier = "neoforge"
-    archiveVersion = "v${mod_version}"
-    archiveBaseName = fileName
+    archiveClassifier = null
+}
+
+jar {
+    archiveClassifier = "dev"
+}
+
+components.java {
+    withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+        skip()
+    }
 }
