@@ -7,7 +7,7 @@ pluginManagement {
     }
 }
 
+rootProject.name = archives_base_name
+
 include("common")
 include(enabled_platforms.split(","))
-
-rootProject.name = archives_base_name
