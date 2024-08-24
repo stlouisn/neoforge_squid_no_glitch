@@ -15,8 +15,8 @@ import net.minecraft.world.level.block.BubbleColumnBlock;
 import net.minecraft.world.phys.Vec3;
 
 @Mixin(Squid.class)
-public class MixinSquid extends WaterAnimal {
-    MixinSquid() {
+public class SquidMixin extends WaterAnimal {
+    SquidMixin() {
         super(null, null);
     }
 

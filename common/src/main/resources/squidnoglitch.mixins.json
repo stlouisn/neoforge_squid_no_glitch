@@ -4,9 +4,9 @@
   "package": "com.stevekung.squidnoglitch.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "MixinSquid",
-    "MixinSquid$SquidRandomMovementGoal_MC132473",
-    "MixinSquid$SquidRandomMovementGoal_MC212687"
+    "SquidMixin",
+    "SquidMixin$SquidRandomMovementGoal_MC132473",
+    "SquidMixin$SquidRandomMovementGoal_MC212687"
   ],
   "injectors": {
     "defaultRequire": 1
