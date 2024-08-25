@@ -13,8 +13,8 @@
         "issues": "${url_issues}"
     },
     "license": "${mod_license}",
-    "icon": "logo.png",
-    "environment": "*",
+    "icon": "assets/${mod_id}/icon.png",
+    "environment": "${mod_fabric_environment}",
     "entrypoints": {
         "main": [
             "${maven_group}.fabric.${maven_main_package}"
