@@ -2,7 +2,7 @@
     "schemaVersion": 1,
     "id": "${mod_id}",
     "version": "${mod_version}",
-    "name": "${mod_name}",
+    "name": "${mod_name} [C]",
     "description": "${mod_description}",
     "authors": [
         "${mod_authors}"
@@ -17,7 +17,7 @@
     "environment": "${mod_fabric_environment}",
     "entrypoints": {
         "main": [
-            "${maven_group}.fabric.${maven_main_package}"
+            "com.stevekung.squidnoglitch.fabric.SquidNoGlitch"
         ]
     },
     "mixins": [
@@ -28,9 +28,14 @@
         "minecraft": "${minecraft_version}",
         "architectury": ">=${architectury_api_version}"
     },
+    "recommends": {
+        "modmenu": "*"
+    },
     "custom": {
         "modmenu": {
             "links": {
+                "modmenu.modrinth": "${url_modrinth}",
+                "modmenu.curseforge": "${url_curseforge}",
                 "modmenu.discord": "${url_discord}"
             }
         }

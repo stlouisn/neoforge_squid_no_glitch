@@ -3,8 +3,8 @@
   "package": "com.stevekung.squidnoglitch.mixin",
   "compatibilityLevel": "JAVA_21",
   "minVersion": "0.8.5",
-  "client": [
-  ],
+  "client": [],
+  "server": [],
   "mixins": [
     "SquidMixin",
     "SquidMixin$SquidRandomMovementGoal_MC132473",
