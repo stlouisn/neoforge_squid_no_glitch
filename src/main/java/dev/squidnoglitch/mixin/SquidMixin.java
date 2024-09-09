@@ -1,4 +1,4 @@
-package com.stevekung.squidnoglitch.mixin;
+package dev.squidnoglitch.mixin;
 
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.ai.goal.Goal;

@@ -1,7 +1,7 @@
 modLoader = "javafml"
 loaderVersion = "[4,)"
 license = "${mod_license}"
-issueTrackerURL = "${url_issues}"
+issueTrackerURL = "${git_issues}"
 
 [[mods]]
 modId = "${mod_id}"
@@ -13,24 +13,17 @@ displayURL = "${url_homepage}"
 logoFile = "logo.png"
 
 [[dependencies.${mod_id}]]
-modId="neoforge"
-type="required"
-versionRange=">=${neoforge_min_version}"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies.${mod_id}]]
-modId = "minecraft"
-type="required"
-versionRange = "${minecraft_version}"
+modId = "neoforge"
+type = "required"
+versionRange = ">=${neoforge_min_version}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.${mod_id}]]
-modId = "architectury"
+modId = "minecraft"
 type = "required"
-versionRange = ">=${architectury_api_version}"
-ordering = "AFTER"
+versionRange = "${minecraft_version}"
+ordering = "NONE"
 side = "BOTH"
 
 [[mixins]]
