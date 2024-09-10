@@ -1,0 +1,5 @@
+/ Mojang Mappings /
+dependencies {
+  loom { silentMojangMappingsLicense() }
+  mappings(loom.officialMojangMappings())
+}
