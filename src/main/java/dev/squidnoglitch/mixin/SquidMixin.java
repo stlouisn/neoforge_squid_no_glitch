@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 public class SquidMixin extends WaterAnimal {
 
   SquidMixin() {
+    //noinspection DataFlowIssue
     super(null, null);
   }
 
@@ -34,6 +35,7 @@ public class SquidMixin extends WaterAnimal {
    * Fix <a href="https://bugs.mojang.com/browse/MC-212687">MC-212687</a>
    * Removing {@link net.minecraft.world.entity.LivingEntity#getNoActionTime()} check will restore the movement of squid if the player is far from them.</p>
    */
+  @SuppressWarnings("unused")
   @Mixin(targets = "net.minecraft.world.entity.animal.Squid$SquidRandomMovementGoal")
   public abstract static class SquidRandomMovementGoal_MC212687 extends Goal {
 
